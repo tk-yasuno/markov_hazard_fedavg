@@ -1,0 +1,34 @@
+flowchart TD
+    INIT(["Server: Initialize β = 0  · 12-dim ·"])
+    INIT --> SAMPLE
+
+    SAMPLE["Randomly sample S_r ⊂ all clients\nPartial participation: 10% per round"]
+    SAMPLE --> BROADCAST
+
+    BROADCAST["Broadcast current β to selected clients S_r"]
+    BROADCAST --> CLIENT_START
+
+    subgraph CLIENT["Each client u ∈ S_r  · runs in parallel ·"]
+        CLIENT_START["Receive β  ·  save β_init ← β"]
+        CLIENT_START --> MBATCH
+        MBATCH["Draw mini-batch\nfrom local inspection records"]
+        MBATCH --> LOSS
+        LOSS["loss = −log L·β, mini-batch·\nautograd: loss.backward()"]
+        LOSS --> SGD_STEP
+        SGD_STEP["SGD step: β ← β − η_local · ∇β"]
+        SGD_STEP --> K_CHECK{"k < K\nlocal steps?"}
+        K_CHECK -- Yes --> MBATCH
+        K_CHECK -- No --> PSEUDO
+        PSEUDO["Pseudo-gradient:\ng_u = (β_init − β_local) / η_local\nReturn g_u and n_u to server"]
+    end
+
+    PSEUDO --> COLLECT
+    COLLECT["Server collects g_u, n_u\nfrom all u ∈ S_r"]
+    COLLECT --> AGG
+    AGG["Sample-weighted aggregation:\nḡ = Σ(n_u · g_u) / Σ(n_u)"]
+    AGG --> CLIP
+    CLIP["Gradient clipping    +    Momentum\nβ ← β − η_global · ḡ"]
+    CLIP --> R_CHECK{"r < R\nrounds?"}
+    R_CHECK -- "Yes · next round" --> SAMPLE
+    R_CHECK -- "No · training done" --> DONE
+    DONE(["Global β · 12-dim\nBenchmark transition probabilities\nCheckpoint saved"])
