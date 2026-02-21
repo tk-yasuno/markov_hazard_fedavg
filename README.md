@@ -405,6 +405,6 @@ If you use this code or experimental setup in your research, please cite:
 @software{markov_hazard_fedavg_2026,
   title  = {Markov Deterioration Hazard Model with Federated Averaging},
   year   = {2026},
-  url    = {https://github.com/YOUR_ACCOUNT/markov_hazard_fedavg}
+  url    = {https://github.com/tk-yasuno/markov_hazard_fedavg}
 }
 ```
