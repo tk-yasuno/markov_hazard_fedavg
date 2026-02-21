@@ -26,5 +26,20 @@ Thumbs.db
 0_LogBAK/
 1_Methodology/
 
+# Paper (local draft only — not published to GitHub)
+paper/
+
+# LaTeX auxiliary files
+paper/*.aux
+paper/*.log
+paper/*.bbl
+paper/*.blg
+paper/*.dvi
+paper/*.out
+paper/*.toc
+paper/*.fls
+paper/*.fdb_latexmk
+paper/*.synctex.gz
+
 # Checkpoint (large binary — optionally exclude)
 # output/global_model.pt
